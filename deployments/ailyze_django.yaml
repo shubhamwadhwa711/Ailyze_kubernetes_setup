@@ -55,7 +55,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ailyze-secret
-              key: celery-result-backend
+              key: redis-url
         command: ["sh", "-c"]
         args:
           - |
@@ -101,7 +101,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ailyze-secret
-              key: celery-result-backend
+              key: redis-url
         command: ["sh", "-c"]
         args:
           - |
