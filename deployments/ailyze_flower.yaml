@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ailyze-flower-deployment
+  labels:
+    app: ailyze-flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ailyze-flower
+  template:
+    metadata:
+      labels:
+        app: ailyze-flower
+    spec:
+      containers:
+      - name: flower
+        image: mher/flower:0.9.7
+        ports:
+        - containerPort: 5555
+        env:
+        - name: CELERY_BROKER_URL
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: celery-broker-url
+        - name: FLOWER_BASIC_AUTH
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: flower-basic-auth
+        resources:
+          limits:
+            memory: 1G
+      #   volumeMounts:
+      #   - name: flower-static
+      #     mountPath: /app/static
+      # volumes:
+      # - name: flower-static
+      #   emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ailyze-flower-service
+spec:
+  selector:
+    app: ailyze-flower
+  ports:
+    - port: 80
+      name: http
+      targetPort: 5555
+    - port: 443
+      name: https
+      targetPort: 5555
+  type: LoadBalancer

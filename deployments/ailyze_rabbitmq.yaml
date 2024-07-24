@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ailyze-rabbitmq-deployment
+  labels:
+    app: ailyze-rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ailyze-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: ailyze-rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        imagePullPolicy: Always
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: rabbitmq_user
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: rabbitmq_password
+        # livenessProbe:
+        #   httpGet:
+        #     path: /api/healthchecks/node
+        #     port: 15672
+        #   initialDelaySeconds: 120  
+        #   timeoutSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /api/healthchecks/node
+        #     port: 15672
+        #   initialDelaySeconds: 60 
+        #   timeoutSeconds: 10
+        resources:
+          requests:
+            memory: "1Gi"   
+            cpu: "1"     
+          limits:
+            memory: "2Gi"   
+            cpu: "2"       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ailyze-rabbitmq-service
+spec:
+  selector:
+    app: ailyze-rabbitmq
+  ports:
+  - name: amqp
+    port: 5672
+    targetPort: 5672
+  - name: management
+    port: 15672
+    targetPort: 15672

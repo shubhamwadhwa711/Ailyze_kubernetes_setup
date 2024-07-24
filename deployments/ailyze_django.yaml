@@ -1,0 +1,148 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ailyze-django-deployment
+  labels:
+    app: ailyze-django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ailyze-django
+  template:
+    metadata:
+      labels:
+        app: ailyze-django
+    spec:
+      containers:
+      - name: ailyze-advance
+        image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: host
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: db_name
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: password 
+        - name: CELERY_BROKER_URL
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: celery-broker-url
+        - name: CELERY_RESULT_BACKEND
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: celery-result-backend
+        command: ["sh", "-c"]
+        args:
+          - |
+            python manage.py migrate &&
+            gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 4 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
+      - name: ailyze-bot
+        image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: host
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: db_name
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-db-secret
+              key: password 
+        - name: CELERY_BROKER_URL
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: celery-broker-url
+        - name: CELERY_RESULT_BACKEND
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: celery-result-backend
+        command: ["sh", "-c"]
+        args:
+          - |
+            python manage.py migrate &&
+            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 4 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log
+
+---   
+apiVersion: v1
+kind: Service
+metadata:
+  name: ailyze-django-service
+spec:
+  selector: 
+    app: ailyze-django
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+    - name: api
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+    - name: bot
+      protocol: TCP
+      port: 8001
+      targetPort: 8001
+  type: ClusterIP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ailyze-django-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ailyze-django-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70
+    
