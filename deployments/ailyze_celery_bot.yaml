@@ -17,6 +17,7 @@ spec:
       containers:
       - name: celery-bot
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
         command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q prepare_bot -n prepare -Ofair"]
         env:
         - name: DB_HOST
