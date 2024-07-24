@@ -50,6 +50,11 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: celery-result-backend
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: celery-result-backend
         # resources:
         #   limits:
         #     memory: 5Gi
