@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: ailyze-django-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
 spec:
