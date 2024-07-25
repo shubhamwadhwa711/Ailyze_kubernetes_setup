@@ -1,8 +1,8 @@
 #!/bin/bash
-kubectl rollout restart  \
-    -f deployment.apps/ailyze-django-deployment \
-    -f deployment.apps/ailyze-celery-theme-deploymentt \
-    -f deployment.apps/ailyze-celery-frequency-deployment \
-    -f deployment.apps/ailyze-celery-compare-deployment \
-    -f deployment.apps/ailyze-celery-bot-deployment \
-    "$@";
+kubectl rollout restart deployment \
+    ailyze-django-deployment \
+    ailyze-celery-theme-deployment \
+    ailyze-celery-frequency-deployment \
+    ailyze-celery-compare-deployment \
+    ailyze-celery-bot-deployment \
+    "$@"
