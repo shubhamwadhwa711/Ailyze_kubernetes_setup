@@ -1,5 +1,5 @@
 #!/bin/bash
 
-kubctl apply \
+kubectl apply \
     -f .frontend/ailyze_react.yaml
     "$@";
