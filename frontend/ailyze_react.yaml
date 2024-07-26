@@ -31,6 +31,6 @@ spec:
   ports:
   - name: react-app
     port: 3000
-    targetPort: 3020
+    targetPort: 3000
   type: LoadBalancer
       
