@@ -15,7 +15,7 @@ spec:
         app: ailyze-react
     spec:
       containers:
-        name: ailyze-web-app
+      - name: ailyze-web-app
         imagePullPolicy: Always
         image: shahar/react-tutorial
         ports:
