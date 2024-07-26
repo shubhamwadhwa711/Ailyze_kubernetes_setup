@@ -14,7 +14,7 @@ spec:
       labels:
         app: ailyze-react
     spec:
-      container:
+      containers:
         name: ailyze-web-app
         imagePullPolicy: Always
         image: shahar/react-tutorial
