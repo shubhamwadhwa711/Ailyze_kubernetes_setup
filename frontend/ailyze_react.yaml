@@ -20,6 +20,7 @@ spec:
         image: ailyzeregistery.azurecr.io/ailyze-react:latest
         ports:
         - containerPort: 3000
+        command: ["npm", "start"] 
 ---
 apiVersion: v1
 kind: Service
