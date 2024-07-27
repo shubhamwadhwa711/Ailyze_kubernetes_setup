@@ -50,13 +50,13 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: celery-result-backend
-        resources:
-          requests:
-            cpu: "200m"
-            memory: "256Mi"
-          limits:
-            cpu: "500m"
-            memory: "512Mi"     
+        # resources:
+        #   requests:
+        #     cpu: "200m"
+        #     memory: "256Mi"
+        #   limits:
+        #     cpu: "500m"
+        #     memory: "512Mi"     
 ---
 apiVersion: v1
 kind: Service
@@ -94,4 +94,4 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 80
+        averageUtilization: 60
