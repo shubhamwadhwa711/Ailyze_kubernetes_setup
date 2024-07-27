@@ -63,11 +63,11 @@ spec:
             gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 4 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "250m"
+            memory: "512Mi"
           limits:
-            cpu: "500m"
-            memory: "256Mi"
+            cpu: "1000m"
+            memory: "2048Mi"
 
       - name: ailyze-bot
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
@@ -117,11 +117,11 @@ spec:
             gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 4 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log
         resources:
           requests:
-            cpu: "200m"
-            memory: "250Mi"
+            cpu: "250m"
+            memory: "512Mi"
           limits:
-            cpu: "600m"
-            memory: "500Mi"    
+            cpu: "1000m"
+            memory: "2048Mi"    
 ---   
 apiVersion: v1
 kind: Service

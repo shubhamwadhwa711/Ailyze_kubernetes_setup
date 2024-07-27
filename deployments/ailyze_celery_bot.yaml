@@ -52,11 +52,11 @@ spec:
               key: celery-result-backend
         resources:
           requests:
-            cpu: "400m"
+            cpu: "200m"
             memory: "200Mi"
           limits:
             cpu: "800m"
-            memory: "400Mi"  
+            memory: "1024Mi"    
         
 ---
 apiVersion: v1
