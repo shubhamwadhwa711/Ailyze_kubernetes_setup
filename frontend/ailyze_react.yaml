@@ -19,7 +19,7 @@ spec:
         imagePullPolicy: Always
         image: ailyzeregistery.azurecr.io/ailyze-react:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 3020
         command: ["npm", "start"] 
 ---
 apiVersion: v1
@@ -30,8 +30,11 @@ spec:
   selector:
     app: ailyze-react
   ports:
-  - name: react-app
-    port: 3000
-    targetPort: 3000
+  - port: 80
+    name: http
+    targetPort: 3020
+  - port: 443
+    name: https
+    targetPort: 3020
   type: LoadBalancer
       
