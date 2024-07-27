@@ -1,6 +1,7 @@
 #!/bin/bash
 kubectl apply \
     -f ./deployments/ailyze_django.yaml \
+    -f ./deployments/ailyze_django_bot.yaml \
     -f ./deployments/ailyze_redis.yaml \
     -f ./deployments/ailyze_rabbitmq.yaml \
     -f ./deployments/ailyze_flower.yaml \

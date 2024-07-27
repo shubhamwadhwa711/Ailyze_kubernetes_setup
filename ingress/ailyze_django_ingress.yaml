@@ -29,7 +29,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: ailyze-django-service
+            name: ailyze-django-bot-service
             port:
               number: 8001
         
