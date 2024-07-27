@@ -17,7 +17,7 @@ spec:
       containers:
       - name: ailyze-web-app
         imagePullPolicy: Always
-        image: myoung34/docker-react
+        image: ailyzeregistery.azurecr.io/ailyze-react:latest
         ports:
         - containerPort: 3000
 ---
