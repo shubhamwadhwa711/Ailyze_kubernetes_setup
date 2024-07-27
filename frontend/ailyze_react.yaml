@@ -21,6 +21,13 @@ spec:
         ports:
         - containerPort: 3020
         command: ["npm", "start"] 
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+          limits:
+            cpu: "600m"
+            memory: "500Mi" 
 ---
 apiVersion: v1
 kind: Service

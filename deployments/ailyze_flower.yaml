@@ -31,14 +31,13 @@ spec:
               name: ailyze-secret
               key: flower-basic-auth
         resources:
+          requests:
+            cpu: "50m"
+            memory: "50Mi"
           limits:
-            memory: 1G
-      #   volumeMounts:
-      #   - name: flower-static
-      #     mountPath: /app/static
-      # volumes:
-      # - name: flower-static
-      #   emptyDir: {}
+            cpu: "100m"
+            memory: "100Mi"    
+
 ---
 apiVersion: v1
 kind: Service

@@ -46,11 +46,11 @@ spec:
         #   timeoutSeconds: 10
         resources:
           requests:
-            memory: "1Gi"   
-            cpu: "1"     
+            cpu: "100m"
+            memory: "100Mi"
           limits:
-            memory: "2Gi"   
-            cpu: "2"       
+            cpu: "400m"
+            memory: "400Mi"    
 ---
 apiVersion: v1
 kind: Service
