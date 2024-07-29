@@ -51,10 +51,4 @@ spec:
     - port: 80
       name: http
       targetPort: 5555
-    - port: 443
-      name: https
-      targetPort: 5555
-    - port: 8001
-      name: http-bot
-      targetPort: 5555
   type: LoadBalancer
