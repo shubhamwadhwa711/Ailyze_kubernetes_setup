@@ -19,7 +19,7 @@ spec:
         image: mher/flower:latest
         ports:
         - containerPort: 5555
-        args: ["--broker=$(CELERY_BROKER_URL)", "--basic_auth=$(FLOWER_BASIC_AUTH)"]
+        command: ["flower", "--broker=${CELERY_BROKER_URL}", "--port=5555"]
         env:
         - name: CELERY_BROKER_URL
           valueFrom:
