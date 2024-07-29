@@ -15,8 +15,6 @@ spec:
       containers:
       - name: flower
         image: mher/flower:0.9.7
-        command: ["flower"]
-        args: ["--broker=${CELERY_BROKER_URL}", "--port=5555"]
         ports:
         - containerPort: 5555
         env:
@@ -31,13 +29,13 @@ spec:
               name: ailyze-secret
               key: flower-basic-auth
         # Optional: Set resource requests and limits
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "50Mi"
-          limits:
-            cpu: "100m"
-            memory: "100Mi"
+        # resources:
+        #   requests:
+        #     cpu: "50m"
+        #     memory: "50Mi"
+        #   limits:
+        #     cpu: "100m"
+        #     memory: "100Mi"
 ---
 apiVersion: v1
 kind: Service
