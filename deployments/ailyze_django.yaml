@@ -61,13 +61,11 @@ spec:
           - |
             python manage.py migrate &&
             gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 4 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
-        # resources:
-        #   requests:
-        #     cpu: "250m"
-        #     memory: "512Mi"
-        #   limits:
-        #     cpu: "1000m"
-        #     memory: "2048Mi"
+        resources:
+          requests:
+            memory: "512Mi"
+          limits:
+            memory: "2048Mi"
 ---   
 apiVersion: v1
 kind: Service
