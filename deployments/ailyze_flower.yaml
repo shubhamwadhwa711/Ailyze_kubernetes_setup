@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ailyze-flower-deployment
-  labels:
-    app: ailyze-flower
 spec:
   replicas: 1
   selector:
@@ -17,9 +15,10 @@ spec:
       containers:
       - name: flower
         image: mher/flower:latest
+        command: ["python"]
+        args: ["-m", "flower.app.cli"]
         ports:
         - containerPort: 5555
-        command: ["flower", "--broker=${CELERY_BROKER_URL}", "--port=5555", "--basic-auth=${FLOWER_BASIC_AUTH}"]
         env:
         - name: CELERY_BROKER_URL
           valueFrom:
@@ -31,13 +30,8 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: flower-basic-auth
-        # resources:
-        #   requests:
-        #     cpu: "50m"
-        #     memory: "50Mi"
-        #   limits:
-        #     cpu: "100m"
-        #     memory: "100Mi"    
+        - name: FLOWER_PORT
+          value: "5555"   
 
 ---
 apiVersion: v1
