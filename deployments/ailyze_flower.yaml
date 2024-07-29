@@ -15,8 +15,11 @@ spec:
       containers:
       - name: flower
         image: mher/flower:latest
-        command: ["python"]
-        args: ["-m", "flower.app.cli"]
+        command: ["flower"]
+        args:
+          - "--broker=${CELERY_BROKER_URL}"
+          - "--port=${FLOWER_PORT}"
+          - "--basic_auth=${FLOWER_BASIC_AUTH}"
         ports:
         - containerPort: 5555
         env:
@@ -31,7 +34,8 @@ spec:
               name: ailyze-secret
               key: flower-basic-auth
         - name: FLOWER_PORT
-          value: "5555"   
+          value: "5555"
+
 
 ---
 apiVersion: v1
