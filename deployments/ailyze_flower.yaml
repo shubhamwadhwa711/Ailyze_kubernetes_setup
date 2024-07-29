@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flower
-        image: mher/flower:latest
+        image:image: mher/flower:0.9.7
         command: ["flower"]
         args: ["--broker=${CELERY_BROKER_URL}", "--port=5555"]
         ports:
