@@ -17,7 +17,7 @@ spec:
       containers:
       - name: ailyze-advance
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
@@ -65,7 +65,7 @@ spec:
           requests:
             memory: "512Mi"
           limits:
-            memory: "1024Mi"
+            memory: "2024Mi"
 ---   
 apiVersion: v1
 kind: Service
@@ -106,5 +106,5 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 70
     

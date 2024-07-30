@@ -17,7 +17,7 @@ spec:
       containers:
       - name: celery-bot
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q prepare_bot -n prepare -Ofair"]
         env:
         - name: DB_HOST
@@ -54,7 +54,7 @@ spec:
           requests:
             memory: "512Mi"
           limits:
-            memory: "1024Mi"
+            memory: "2024Mi"
 ---  
         
 ---
@@ -88,4 +88,4 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 70

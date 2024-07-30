@@ -17,7 +17,7 @@ spec:
       containers:
       - name: ailyze-bot
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8001
         env:
@@ -60,12 +60,12 @@ spec:
         args:
           - |
             python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 4 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log
+            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 4 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log  
         resources:
           requests:
             memory: "512Mi"
           limits:
-            memory: "1024Mi"    
+            memory: "2024Mi"
 ---   
 apiVersion: v1
 kind: Service
@@ -98,5 +98,5 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 70
     

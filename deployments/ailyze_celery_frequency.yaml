@@ -17,7 +17,7 @@ spec:
       containers:
       - name: celery-frequency
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q frequency_analysis -n frequency -Ofair"]
         env:
         - name: DB_HOST
@@ -54,7 +54,7 @@ spec:
           requests:
             memory: "512Mi"
           limits:
-            memory: "1024Mi"
+            memory: "2024Mi"
 ---
 ---
 apiVersion: v1
@@ -87,4 +87,4 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 70
