@@ -52,9 +52,10 @@ spec:
               key: celery-result-backend
         resources:
           requests:
-            memory: "1Gi"
+            memory: "512Mi"
           limits:
-            memory: "2Gi"     
+            memory: "1024Mi"
+---
 ---
 apiVersion: v1
 kind: Service
@@ -81,12 +82,6 @@ spec:
   minReplicas: 1
   maxReplicas: 5
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 60
   - type: Resource
     resource:
       name: memory
