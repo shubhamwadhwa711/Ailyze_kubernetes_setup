@@ -80,6 +80,7 @@ spec:
     name: ailyze-celery-theme-deployment
   minReplicas: 1
   maxReplicas: 5
+  metrics:
   - type: Resource
     resource:
       name: memory
