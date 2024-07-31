@@ -9,7 +9,7 @@ spec:
   replicas: 1
   minReadySeconds: 5
   selector:
-    matchLables:
+    matchLabels:
       app: ailyze-companion
   strategy:
     type: RollingUpdate
