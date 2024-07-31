@@ -30,9 +30,9 @@ spec:
             memory: 150Mi
           requests:
             memory: 100Mi
-        envFrom:
-        - secretRef:
-            name: ailyze-companion-secret
+        # envFrom:
+        # - secretRef:
+        #     name: ailyze-companion-secret
         ports:
         - containerPort: 3010
         volumeMounts:
