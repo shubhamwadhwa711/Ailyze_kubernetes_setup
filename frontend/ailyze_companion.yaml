@@ -1,0 +1,57 @@
+apiVersion: extensions/v1
+kind: Deployment
+metadata:
+  name: ailyze-companion-deployment
+  namespace: uppy
+  labels: 
+    app: ailyze-campanion
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  selector:
+    matchLables:
+      app: ailyze-companion
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: ailyze-companion
+    spec:
+      containers:
+      - image: docker.io/transloadit/companion:latest
+        imagePullPolicy: ifNotPresent
+        name: companion
+        resources:
+          limits:
+            memory: 150Mi
+          requests:
+            memory: 100Mi
+        envFrom:
+        - secretRef:
+            name: ailyze-companion-secret
+        ports:
+        - containerPort: 3010
+        volumeMounts:
+        - name: companion-data
+          mountPath: /mnt/companion-data
+      volumes:
+      - name: companion-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ailyze-companion-service
+  namespace: uppy
+spec:
+  ports:
+  - port: 80
+    targetPort: 3010
+    protocol: TCP
+  selector:
+    app: ailyze-companion
+

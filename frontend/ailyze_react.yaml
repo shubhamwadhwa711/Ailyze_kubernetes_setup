@@ -6,6 +6,7 @@ metadata:
     app: ailyze-react
 spec:
   replicas: 1
+  minReadySeconds: 5
   selector:
     matchLabels:
       app: ailyze-react
