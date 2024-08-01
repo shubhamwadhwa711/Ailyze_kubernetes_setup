@@ -40,7 +40,8 @@ spec:
           mountPath: /mnt/companion-data
       volumes:
       - name: companion-data
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: ailyze-companion-pvc
 ---
 apiVersion: v1
 kind: Service
