@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ailyze-companion-ingress
+  namespace: uppy
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-companion
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - uppycompanion.ailyze.com
+    secretName: ailyze-companion-ssl
+  rules:
+  - host: uppycompanion.ailyze.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ailyze-companion-service
+            port:
+              number: 80
+      
+        
+
+  

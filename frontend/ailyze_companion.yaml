@@ -55,5 +55,4 @@ spec:
     protocol: TCP
   selector:
     app: ailyze-companion
-  type: LoadBalancer
 
