@@ -17,7 +17,6 @@ spec:
       containers:
       - name: celery-theme
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q themeandresearchquestion -n theme -Ofair"]
         env:
         - name: DB_HOST

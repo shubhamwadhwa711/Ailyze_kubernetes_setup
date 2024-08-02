@@ -17,7 +17,6 @@ spec:
       containers:
       - name: ailyze-bot
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8001
         env:

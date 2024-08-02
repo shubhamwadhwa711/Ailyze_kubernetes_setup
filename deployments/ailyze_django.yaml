@@ -17,7 +17,6 @@ spec:
       containers:
       - name: ailyze-advance
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
