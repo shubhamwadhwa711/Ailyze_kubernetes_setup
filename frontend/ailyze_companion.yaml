@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - image: docker.io/transloadit/companion:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: companion
         resources:
           limits:
