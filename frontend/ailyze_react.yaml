@@ -18,6 +18,7 @@ spec:
       containers:
       - name: ailyze-web-app
         image: ailyzeregistery.azurecr.io/ailyze-react:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3020
         command: ["npm", "start"] 

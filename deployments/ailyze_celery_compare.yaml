@@ -17,6 +17,7 @@ spec:
       containers:
       - name: celery-compare
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
         command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q compareviewpoint -n compare -Ofair"]
         env:
         - name: DB_HOST

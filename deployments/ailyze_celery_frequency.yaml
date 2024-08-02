@@ -17,6 +17,7 @@ spec:
       containers:
       - name: celery-frequency
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
         command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q frequency_analysis -n frequency -Ofair"]
         env:
         - name: DB_HOST
