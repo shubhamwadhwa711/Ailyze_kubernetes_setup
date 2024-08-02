@@ -17,7 +17,6 @@ spec:
     spec:
       containers:
       - name: ailyze-web-app
-        imagePullPolicy: IfNotPresent
         image: ailyzeregistery.azurecr.io/ailyze-react:latest
         ports:
         - containerPort: 3020
