@@ -28,14 +28,6 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: flower-basic-auth
-        # Optional: Set resource requests and limits
-        # resources:
-        #   requests:
-        #     cpu: "50m"
-        #     memory: "50Mi"
-        #   limits:
-        #     cpu: "100m"
-        #     memory: "100Mi"
 ---
 apiVersion: v1
 kind: Service
