@@ -6,4 +6,7 @@ kubectl rollout restart deployment \
     ailyze-celery-frequency-deployment \
     ailyze-celery-compare-deployment \
     ailyze-celery-bot-deployment \
+    ailyze-flower-deployment \
+    ailyze-redis-deployment \
+    ailyze-rabbitmq-deployment
     "$@"
