@@ -42,7 +42,6 @@ spec:
   - port: 443
     name: https
     targetPort: 3020
-  type: LoadBalancer
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
