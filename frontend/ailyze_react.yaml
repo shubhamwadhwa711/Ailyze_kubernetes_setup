@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 3020
-        command: ["pm2-runtime", "start", "ecosystem.config.js"] 
+        command: ["npm", "start"] 
         resources:
           requests:
             memory: "512Mi"
