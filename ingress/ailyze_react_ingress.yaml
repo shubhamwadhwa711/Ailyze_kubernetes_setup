@@ -11,10 +11,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - kube.ailyze.com
+    - new.ailyze.com
     secretName: ailyze-react-ssl
   rules:
-  - host: kube.ailyze.com
+  - host: new.ailyze.com
     http:
       paths:
       - path: /
