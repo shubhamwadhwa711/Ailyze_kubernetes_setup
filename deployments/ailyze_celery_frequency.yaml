@@ -66,8 +66,8 @@ spec:
     app: ailyze-celery-frequency
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 5555
+      targetPort: 5555
   type: ClusterIP
 ---
 apiVersion: autoscaling/v2
