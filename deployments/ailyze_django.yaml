@@ -63,8 +63,10 @@ spec:
             gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 4 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
         resources:
           requests:
+            cpu: "100m"
             memory: "512Mi"
           limits:
+            cpu: "1"
             memory: "3024Mi"
 ---   
 apiVersion: v1
@@ -83,10 +85,6 @@ spec:
       protocol: TCP
       port: 8000
       targetPort: 8000
-    - name: bot
-      protocol: TCP
-      port: 8001
-      targetPort: 8001
   type: ClusterIP
 ---
 apiVersion: autoscaling/v2
@@ -106,5 +104,5 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 80
+        averageUtilization: 60
     

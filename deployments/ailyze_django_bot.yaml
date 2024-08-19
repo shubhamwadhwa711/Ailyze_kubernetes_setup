@@ -63,8 +63,10 @@ spec:
             gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 4 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log  
         resources:
           requests:
+            cpu: "100m"
             memory: "512Mi"
           limits:
+            cpu: "1"
             memory: "3024Mi"
 ---   
 apiVersion: v1
@@ -98,5 +100,5 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 80
+        averageUtilization: 60
     
