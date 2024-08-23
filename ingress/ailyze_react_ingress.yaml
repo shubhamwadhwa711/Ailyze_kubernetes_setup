@@ -9,10 +9,10 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300" 
 spec:
   ingressClassName: nginx
-  # tls:
-  # - hosts:
-  #   - new.ailyze.com
-  #   secretName: ailyze-react-ssl
+  tls:
+  - hosts:
+    - new.ailyze.com
+    secretName: ailyze-react-ssl
   rules:
   - host: new.ailyze.com
     http:
