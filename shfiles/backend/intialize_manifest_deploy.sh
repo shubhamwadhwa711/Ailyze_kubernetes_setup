@@ -2,7 +2,7 @@
 kubectl apply \
     -f ./secrets/ailyze_secrets.yaml \
     -f ./secrets/ailyze_db_secrets.yaml \
-    -f ./secrets/acr_secrets.yaml \
+    -f ./secrets/acr_secret.yaml \
     -f ./deployments/ailyze_django.yaml \
     -f ./deployments/ailyze_django_bot.yaml \
     -f ./deployments/ailyze_redis.yaml \
