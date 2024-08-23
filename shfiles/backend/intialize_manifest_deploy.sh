@@ -1,5 +1,8 @@
 #!/bin/bash
 kubectl apply \
+    -f ./secrets/ailyze_secrets.yaml \
+    -f ./secrets/ailyze_db_secrets.yaml \
+    -f ./secrets/acr_secrets.yaml \
     -f ./deployments/ailyze_django.yaml \
     -f ./deployments/ailyze_django_bot.yaml \
     -f ./deployments/ailyze_redis.yaml \
@@ -9,7 +12,5 @@ kubectl apply \
     -f ./deployments/ailyze_celery_theme.yaml \
     -f ./deployments/ailyze_celery_frequency.yaml \
     -f ./deployments/ailyze_celery_compare.yaml \
-    -f ./secrets/ailyze_secrets.yaml \
-    -f ./secrets/ailyze_db_secrets.yaml \
     -f ./ingress/ailyze_django_ingress.yaml \
     "$@";
