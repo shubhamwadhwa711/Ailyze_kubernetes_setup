@@ -27,6 +27,8 @@ spec:
             memory: "512Mi"
           limits:
             memory: "1Gi"
+      imagePullSecrets:
+      - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
