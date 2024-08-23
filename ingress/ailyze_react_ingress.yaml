@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ailyze-react-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-react
+    cert-manager.io/cluster-issuer: letsencrypt-new-react
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300" 
