@@ -12,10 +12,10 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
 spec:
   ingressClassName: nginx
-  tls:
-  - hosts:
-    - uppycompanion.ailyze.com
-    secretName: ailyze-companion-ssl
+  # tls:
+  # - hosts:
+  #   - uppycompanion.ailyze.com
+  #   secretName: ailyze-companion-ssl
   rules:
   - host: uppycompanion.ailyze.com
     http:
