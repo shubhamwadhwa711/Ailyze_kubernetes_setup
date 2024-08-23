@@ -12,10 +12,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - demo.ailyze.com
+    - ai.ailyze.com
     secretName: ailyze-django-ssl
   rules:
-  - host: demo.ailyze.com
+  - host: ai.ailyze.com
     http:
       paths:
       - path: /
