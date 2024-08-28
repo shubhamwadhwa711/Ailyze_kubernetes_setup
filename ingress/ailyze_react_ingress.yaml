@@ -6,15 +6,16 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-new-react
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300" 
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - new.ailyze.com
+    - ailyze.com
+    - www.ailzye.com
     secretName: ailyze-react-ssl
   rules:
-  - host: new.ailyze.com
+  - host: ailyze.com
     http:
       paths:
       - path: /
@@ -24,5 +25,13 @@ spec:
             name: ailyze-react-service
             port:
               number: 80
-
-  
+  - host: www.ailzye.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ailyze-react-service
+            port:
+              number: 80
