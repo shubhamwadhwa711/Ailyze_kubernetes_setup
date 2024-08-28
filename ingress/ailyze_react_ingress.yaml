@@ -13,7 +13,7 @@ spec:
   - hosts:
     - ailyze.com
     - www.ailzye.com
-    secretName: ailyze-react-ssl
+    secretName: ailyze-newreact-ssl
   rules:
   - host: ailyze.com
     http:
