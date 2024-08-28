@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-new-react
+  name: ailzye-react
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: ailyze@outlook.com
     privateKeySecretRef:
-      name: letsencrypt-react
+      name: ailyze-react
     solvers:
     - http01:
         ingress:
