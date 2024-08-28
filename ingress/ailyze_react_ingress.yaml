@@ -12,7 +12,7 @@ spec:
   tls:
   - hosts:
     - ailyze.com
-    - www.ailzye.com
+    - www.ailyze.com
     secretName: ailyze-newreact-ssl
   rules:
   - host: ailyze.com
@@ -25,7 +25,7 @@ spec:
             name: ailyze-react-service
             port:
               number: 80
-  - host: www.ailzye.com
+  - host: www.ailyze.com
     http:
       paths:
       - path: /
