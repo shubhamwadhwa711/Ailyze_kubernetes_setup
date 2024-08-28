@@ -54,7 +54,7 @@ spec:
           requests:
             memory: "1Gi"
           limits:
-            memory: "2024Mi"       
+            memory: "2424Mi"       
       imagePullSecrets:
       - name: acr-secret
 ---

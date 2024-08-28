@@ -67,7 +67,7 @@ spec:
             memory: "1Gi"
           limits:
             cpu: "1"
-            memory: "2Gi"
+            memory: "3Gi"
       imagePullSecrets:
       - name: acr-secret
 ---   
