@@ -60,14 +60,14 @@ spec:
         args:
           - |
             python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 4 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
+            gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 2 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
         resources:
           requests:
             cpu: "100m"
             memory: "1Gi"
           limits:
             cpu: "1"
-            memory: "2400Mi"
+            memory: "3Gi"
       imagePullSecrets:
       - name: acr-secret
 ---   
@@ -106,5 +106,4 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
-    
+        averageUtilization: 50

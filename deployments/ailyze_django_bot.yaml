@@ -60,14 +60,14 @@ spec:
         args:
           - |
             python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 4 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log  
+            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 2 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log  
         resources:
           requests:
             cpu: "100m"
             memory: "1Gi"
           limits:
             cpu: "1"
-            memory: "2400Mi"
+            memory: "3Gi"
       imagePullSecrets:
       - name: acr-secret
 ---   
