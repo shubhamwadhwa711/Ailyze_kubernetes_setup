@@ -47,7 +47,7 @@ spec:
         resources:
           requests:
             cpu: "100m"
-            memory: "100Mi"
+            memory: "150Mi"
           limits:
             cpu: "400m"
             memory: "800Mi"    
@@ -84,5 +84,5 @@ spec:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 80
 

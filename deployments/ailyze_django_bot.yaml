@@ -64,10 +64,10 @@ spec:
         resources:
           requests:
             cpu: "100m"
-            memory: "512Mi"
+            memory: "1Gi"
           limits:
             cpu: "1"
-            memory: "3024Mi"
+            memory: "2400Mi"
       imagePullSecrets:
       - name: acr-secret
 ---   
