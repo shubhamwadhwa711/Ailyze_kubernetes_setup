@@ -28,6 +28,8 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: flower-basic-auth
+        command: ["celery"]
+        args: ["flower", "--basic-auth=$(FLOWER_BASIC_AUTH)"]
         resources:
           requests:
             memory: "256Mi"
