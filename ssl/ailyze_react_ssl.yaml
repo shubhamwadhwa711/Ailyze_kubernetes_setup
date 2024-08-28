@@ -1,16 +1,14 @@
 apiVersion: cert-manager.io/v1
-kind: Certificate
+kind: ClusterIssuer
 metadata:
-  name: ailyze-newreact-ssl
+  name: ailyze-react
 spec:
-  secretName: ailyze-newreact-ssl
-  issuerRef:
-    name: ailyze-react
-    kind: ClusterIssuer
-  commonName: ailyze.com
-  dnsNames:
-    - ailyze.com
-    - www.ailyze.com
-  usages:
-    - digital signature
-    - key encipherment
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ailyze@outlook.com
+    privateKeySecretRef:
+      name: ailyze-react
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
