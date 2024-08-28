@@ -5,7 +5,7 @@ metadata:
 spec:
   secretName: ailyze-newreact-ssl
   issuerRef:
-    name: ailzye-react
+    name: ailyze-react
     kind: ClusterIssuer
   commonName: ailyze.com
   dnsNames:
