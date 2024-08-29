@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ailyze-rabbitmq
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: ailyze-rabbitmq
@@ -32,25 +32,35 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: rabbitmq_password
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/healthchecks/node
-        #     port: 15672
-        #   initialDelaySeconds: 120  
-        #   timeoutSeconds: 10
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/healthchecks/node
-        #     port: 15672
-        #   initialDelaySeconds: 60 
-        #   timeoutSeconds: 10
+        - name: RABBITMQ_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: erlang_cookie
+         - name: RABBITMQ_USE_LONGNAME
+          value: "true"
+        - name: K8S_SERVICE_NAME
+          value: ailyze-rabbitmq-service
+        - name: RABBITMQ_NODENAME
+          value: "rabbit@$(MY_POD_NAME).ailzye-rabbitmq-service.default.svc.cluster.local"
+        - name: RABBITMQ_CLUSTER_PARTITION_HANDLING
+          value: "autoheal"
+        - name: RABBITMQ_HIPE_COMPILE
+          value: "1"
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
         resources:
           requests:
             cpu: "100m"
             memory: "150Mi"
           limits:
             cpu: "400m"
-            memory: "800Mi"    
+            memory: "800Mi"
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: rabbitmq-pvc    
 ---
 apiVersion: v1
 kind: Service
