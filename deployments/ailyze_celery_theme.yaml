@@ -37,9 +37,9 @@ spec:
           mountPath: /usr/src/app 
         resources:
           requests:
-            memory: "1Gi"
+            memory: "1500Mi"
           limits:
-            memory: "3Gi"
+            memory: "4Gi"
       volumes:
       - name: app-source
         persistentVolumeClaim:
