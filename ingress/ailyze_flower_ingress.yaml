@@ -15,7 +15,7 @@ spec:
     - flower.ailyze.com
     secretName: ailyze-flower-ssl
   rules:
-  - host: ai.ailyze.com
+  - host: flower.ailyze.com
     http:
       paths:
       - path: /
