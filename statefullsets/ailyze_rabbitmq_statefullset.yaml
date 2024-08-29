@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: ailyze-rabbitmq-statefullset
+  name: ailyze-rabbitmq-statefulset
   labels:
     app: ailyze-rabbitmq-cluster
 spec:
-  serviceName: "ailize-rabbitmq-headless"
+  serviceName: "ailyze-rabbitmq-headless"
   replicas: 3
   selector:
     matchLabels:
@@ -17,11 +17,17 @@ spec:
     spec:
       containers:
       - name: rabbitmq
-        image: rabbitmq:3-management
+        image: rabbitmq:3.9-management
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 5672
-        - containerPort: 15672
+        - name: amqp
+          containerPort: 5672
+        - name: management
+          containerPort: 15672
+        - name: epmd
+          containerPort: 4369
+        - name: cluster-rpc
+          containerPort: 25672
         env:
         - name: RABBITMQ_DEFAULT_USER
           valueFrom:
@@ -33,32 +39,51 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: rabbitmq_password
-        - name: RABBITMQ_NODENAME
-          value: "rabbit@$(MY_POD_NAME).ailize-rabbitmq-headless.default.svc.cluster.local"
-        - name: MY_POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
         - name: RABBITMQ_ERLANG_COOKIE
           valueFrom:
             secretKeyRef:
               name: ailyze-secret
               key: erlang-cookie
+        - name: K8S_SERVICE_NAME
+          value: "ailyze-rabbitmq-headless"
+        - name: RABBITMQ_USE_LONGNAME
+          value: "true"
+        - name: RABBITMQ_NODENAME
+          value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(NAMESPACE).svc.cluster.local"
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: RABBITMQ_CONFIG_FILE
+          value: "/etc/rabbitmq/rabbitmq.conf"
         volumeMounts:
+        - name: config
+          mountPath: /etc/rabbitmq
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
         readinessProbe:
-          httpGet:
-            path: /api/healthchecks/node
-            port: 15672
-          initialDelaySeconds: 60
-          periodSeconds: 10
+          exec:
+            command: ["rabbitmq-diagnostics", "check_port_connectivity"]
+          initialDelaySeconds: 20
+          periodSeconds: 60
+          failureThreshold: 3
         livenessProbe:
-          httpGet:
-            path: /api/healthchecks/node
-            port: 15672
-          initialDelaySeconds: 120
-          periodSeconds: 30
+          exec:
+            command: ["rabbitmq-diagnostics", "status"]
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          failureThreshold: 6
+      volumes:
+      - name: config
+        configMap:
+          name: rabbitmq-config
+          items:
+          - key: rabbitmq.conf
+            path: rabbitmq.conf
   volumeClaimTemplates:
   - metadata:
       name: rabbitmq-data
@@ -69,18 +94,36 @@ spec:
           storage: 1Gi
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+data:
+  rabbitmq.conf: |
+    cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s
+    cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+    cluster_formation.k8s.address_type = hostname
+    cluster_formation.node_cleanup.interval = 30
+    cluster_formation.node_cleanup.only_log_warning = true
+    cluster_partition_handling = autoheal
+    queue_master_locator = min-masters
+    loopback_users.guest = false
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: ailize-rabbitmq-cluster-headless
+  name: ailyze-rabbitmq-headless
 spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
   ports:
   - name: amqp
     port: 5672
-    targetPort: 5672
   - name: management
     port: 15672
-    targetPort: 15672
-  clusterIP: None
+  - name: epmd
+    port: 4369
+  - name: cluster-rpc
+    port: 25672
   selector:
     app: ailyze-rabbitmq-cluster
 ---
@@ -89,6 +132,7 @@ kind: Service
 metadata:
   name: ailyze-rabbitmq-cluster-service
 spec:
+  type: ClusterIP
   ports:
   - name: amqp
     port: 5672
