@@ -16,30 +16,9 @@ spec:
     spec:
       containers:
       - name: celery-frequency
-        image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        image: celery:latest 
         imagePullPolicy: Always
-        command: ["/bin/sh", "-c", "sleep 60 && celery -A AILYZE worker -l info -Q frequency_analysis -n frequency -Ofair"]
-        env:
-        - name: DB_HOST
-          valueFrom:
-            secretKeyRef:
-              name: ailyze-db-secret
-              key: host
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: ailyze-db-secret
-              key: user
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: ailyze-db-secret
-              key: password
-        - name: DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: ailyze-db-secret
-              key: db_name
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "compareviewpoint", "-n", "compare", "-Ofair"]
         - name: CELERY_BROKER_URL
           valueFrom:
             secretKeyRef:
@@ -54,9 +33,7 @@ spec:
           requests:
             memory: "1Gi"
           limits:
-            memory: "2424Mi"
-      imagePullSecrets:
-      - name: acr-secret
+            memory: "3Mi"
 ---
 apiVersion: v1
 kind: Service
