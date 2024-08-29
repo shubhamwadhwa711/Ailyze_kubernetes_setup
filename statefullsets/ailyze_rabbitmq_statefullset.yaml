@@ -59,6 +59,17 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/rabbitmq
+        - name: erlang-cookie
+          mountPath: /var/lib/rabbitmq/.erlang.cookie
+          subPath: erlang-cookie
+      volumes:
+      - name: erlang-cookie
+        secret:
+          secretName: ailyze-secret
+          items:
+          - key: erlang-cookie
+            path: erlang-cookie
+          defaultMode: 0400
         readinessProbe:
           exec:
             command: ["rabbitmq-diagnostics", "check_running"]
