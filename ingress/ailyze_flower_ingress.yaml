@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ailyze-django-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: ailyze-flower
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300" 
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - flower.ailyze.com
+    secretName: ailyze-flower-ssl
+  rules:
+  - host: ai.ailyze.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ailyze-flower-service
+            port:
+              number: 80
+        
+
+  

@@ -42,4 +42,4 @@ spec:
     - port: 80
       targetPort: 5555
       name: http
-  type: LoadBalancer
+  type: ClusterIP

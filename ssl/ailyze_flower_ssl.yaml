@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: ailyze-flower
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ailyze@outlook.com
+    privateKeySecretRef:
+      name: ailyze-flower
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
