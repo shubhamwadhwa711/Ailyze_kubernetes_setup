@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ailyze-celery-pvc
+  name: ailyze-celeryworkers-pvc
 spec:
   accessModes:
     - ReadWriteMany

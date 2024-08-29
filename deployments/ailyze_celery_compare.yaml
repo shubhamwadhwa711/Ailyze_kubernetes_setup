@@ -43,7 +43,7 @@ spec:
       volumes:
       - name: app-source
         persistentVolumeClaim:
-          claimName: ailyze-celery-pvc
+          claimName: ailyze-celeryworkers-pvc
       imagePullSecrets:
       - name: acr-secret
 ---
