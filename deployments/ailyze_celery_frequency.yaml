@@ -18,7 +18,7 @@ spec:
       - name: celery-frequency
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
-        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "frequency_analysis", "-n", "compare", "-Ofair"]
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "frequency_analysis", "-n", "frequency", "-Ofair"]
         env:
         - name: CELERY_BROKER_URL
           valueFrom:

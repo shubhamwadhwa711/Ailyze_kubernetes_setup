@@ -18,7 +18,7 @@ spec:
       - name: celery-theme
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
-        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "themeandresearchquestion", "-n", "compare", "-Ofair"]  
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "themeandresearchquestion", "-n", "theme", "-Ofair"]  
         env:
         - name: CELERY_BROKER_URL
           valueFrom:
