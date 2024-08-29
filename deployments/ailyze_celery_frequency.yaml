@@ -19,6 +19,7 @@ spec:
         image: celery:latest 
         imagePullPolicy: Always
         command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "compareviewpoint", "-n", "compare", "-Ofair"]
+        env:
         - name: CELERY_BROKER_URL
           valueFrom:
             secretKeyRef:
@@ -29,6 +30,8 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: celery-result-backend
+        - name: DJANGO_SETTINGS_MODULE
+          value: "AILYZE.settings" 
         resources:
           requests:
             memory: "1Gi"
