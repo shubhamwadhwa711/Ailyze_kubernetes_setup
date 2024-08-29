@@ -47,10 +47,18 @@ spec:
         volumeMounts:
         - name: rabbitmq-data
           mountPath: /var/lib/rabbitmq
-      volumes:
-      - name: rabbitmq-data
-        persistentVolumeClaim:
-          claimName: ailyze-rabbitmq-pvc
+        readinessProbe:
+          httpGet:
+            path: /api/healthchecks/node
+            port: 15672
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /api/healthchecks/node
+            port: 15672
+          initialDelaySeconds: 120
+          periodSeconds: 30
   volumeClaimTemplates:
   - metadata:
       name: rabbitmq-data
