@@ -4,7 +4,7 @@ kubectl apply \
     -f ./secrets/ailyze_db_secrets.yaml \
     -f ./secrets/acr_secret.yaml \
     -f ./volumes/ailyze_celery_volume.yaml \
-    -f ./volumes/ailyze_rabbitmq_volume.yaml \
+    -f ./statefullsets/ailyze_rabbitmq_statefullset.yaml \
     -f ./deployments/ailyze_django.yaml \
     -f ./deployments/ailyze_django_bot.yaml \
     -f ./deployments/ailyze_redis.yaml \
