@@ -32,25 +32,6 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: rabbitmq_password
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/healthchecks/node
-        #     port: 15672
-        #   initialDelaySeconds: 120  
-        #   timeoutSeconds: 10
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/healthchecks/node
-        #     port: 15672
-        #   initialDelaySeconds: 60 
-        #   timeoutSeconds: 10
-        # resources:
-        #   requests:
-        #     cpu: "100m"
-        #     memory: "150Mi"
-        #   limits:
-        #     cpu: "400m"
-        #     memory: "800Mi"    
 ---
 apiVersion: v1
 kind: Service
@@ -66,23 +47,3 @@ spec:
   - name: management
     port: 15672
     targetPort: 15672
-# ---
-# apiVersion: autoscaling/v2
-# kind: HorizontalPodAutoscaler
-# metadata: 
-#   name: ailyze-rabbitmq-hpa
-# spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment
-#     name: ailyze-rabbitmq-deployment
-#   minReplicas: 1
-#   maxReplicas: 5
-#   metrics:
-#   - type: Resource
-#     resource:
-#       name: memory
-#       target:
-#         type: Utilization
-#         averageUtilization: 80
-

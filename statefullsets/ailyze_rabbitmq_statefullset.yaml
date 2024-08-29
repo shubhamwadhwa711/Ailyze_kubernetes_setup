@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ailyze-rabbitmq-statefullset
+  labels:
+    app: ailyze-rabbitmq-cluster
+spec:
+  serviceName: "ailize-rabbitmq-headless"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ailyze-rabbitmq-cluster
+  template:
+    metadata:
+      labels:
+        app: ailyze-rabbitmq-cluster
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: rabbitmq_user
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: rabbitmq_password
+        - name: RABBITMQ_NODENAME
+          value: "rabbit@$(MY_POD_NAME).ailize-rabbitmq-headless.default.svc.cluster.local"
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: RABBITMQ_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: erlang-cookie
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: ailyze-rabbitmq-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: rabbitmq-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ailize-rabbitmq-cluster-headless
+spec:
+  ports:
+  - name: amqp
+    port: 5672
+    targetPort: 5672
+  - name: management
+    port: 15672
+    targetPort: 15672
+  clusterIP: None
+  selector:
+    app: ailyze-rabbitmq-cluster
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ailyze-rabbitmq-cluster-service
+spec:
+  ports:
+  - name: amqp
+    port: 5672
+    targetPort: 5672
+  - name: management
+    port: 15672
+    targetPort: 15672
+  selector:
+    app: ailyze-rabbitmq-cluster
