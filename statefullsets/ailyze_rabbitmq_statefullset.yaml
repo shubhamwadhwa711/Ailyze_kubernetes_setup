@@ -57,12 +57,16 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: rabbitmq_password
+        command:
+        - sh
+        - -c
+        - |
+          echo $RABBITMQ_ERLANG_COOKIE > /var/lib/rabbitmq/.erlang.cookie
+          chmod 600 /var/lib/rabbitmq/.erlang.cookie
+          exec docker-entrypoint.sh rabbitmq-server
         volumeMounts:
         - name: data
           mountPath: /var/lib/rabbitmq
-        - name: erlang-cookie
-          mountPath: /var/lib/rabbitmq/.erlang.cookie
-          subPath: erlang-cookie
         readinessProbe:
           exec:
             command: ["rabbitmq-diagnostics", "check_running"]
@@ -77,14 +81,6 @@ spec:
           periodSeconds: 60
           failureThreshold: 6
           timeoutSeconds: 15
-      volumes:
-      - name: erlang-cookie
-        secret:
-          secretName: ailyze-secret
-          items:
-          - key: erlang-cookie
-            path: erlang-cookie
-          defaultMode: 0400
   volumeClaimTemplates:
   - metadata:
       name: data
