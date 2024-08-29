@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: celery-compare
-        image: celery:latest 
+        image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "compareviewpoint", "-n", "compare", "-Ofair"]
         env:
@@ -44,6 +44,8 @@ spec:
       - name: app-source
         persistentVolumeClaim:
           claimName: ailyze-celery-pvc
+      imagePullSecrets:
+      - name: acr-secret
 ---
 apiVersion: v1
 kind: Service

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: celery-bot
-        image: celery:latest 
+        image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "prepare_bot", "-n", "compare", "-Ofair"]
         env:
@@ -32,8 +32,6 @@ spec:
               key: celery-result-backend
         - name: DJANGO_SETTINGS_MODULE
           value: "AILYZE.settings"  
-        - name: PYTHONPATH
-          value: "/usr/src/app:/usr/src/app/AILYZE"
         volumeMounts:
         - name: app-source
           mountPath: /usr/src/app 
@@ -46,6 +44,8 @@ spec:
       - name: app-source
         persistentVolumeClaim:
           claimName: ailyze-celery-pvc
+      imagePullSecrets:
+      - name: acr-secret
 ---
 apiVersion: v1
 kind: Service
