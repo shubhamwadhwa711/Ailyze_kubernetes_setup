@@ -14,6 +14,13 @@ spec:
       labels:
         app: ailyze-rabbitmq
     spec:
+      initContainers:
+      - name: fix-permissions
+        image: busybox
+        command: ['sh', '-c', 'chmod 600 /var/lib/rabbitmq/.erlang.cookie']
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
       containers:
       - name: rabbitmq
         imagePullPolicy: IfNotPresent
