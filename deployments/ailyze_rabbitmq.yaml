@@ -42,7 +42,7 @@ spec:
       volumes:  # Moved inside the template spec
       - name: rabbitmq-data
         persistentVolumeClaim:
-          claimName: rabbitmq-pvc
+          claimName: ailyze-rabbitmq-pvc
 ---
 apiVersion: v1
 kind: Service
