@@ -4,7 +4,7 @@ metadata:
   name: ailyze-celery-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 12Gi
