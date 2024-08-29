@@ -32,6 +32,8 @@ spec:
               key: celery-result-backend
         - name: DJANGO_SETTINGS_MODULE
           value: "AILYZE.settings"  
+        - name: PYTHONPATH
+          value: "/usr/src/app:/usr/src/app/AILYZE"
         volumeMounts:
         - name: app-source
           mountPath: /usr/src/app 
