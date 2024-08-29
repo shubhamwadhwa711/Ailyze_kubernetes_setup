@@ -39,7 +39,7 @@ spec:
           requests:
             memory: "1Gi"
           limits:
-            memory: "3Mi"
+            memory: "3Gi"
       volumes:
       - name: app-source
         persistentVolumeClaim:

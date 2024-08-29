@@ -36,7 +36,7 @@ spec:
           requests:
             memory: "1Gi"
           limits:
-            memory: "3Mi"
+            memory: "3Gi"
 ---
 apiVersion: v1
 kind: Service
