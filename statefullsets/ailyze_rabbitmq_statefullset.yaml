@@ -19,17 +19,31 @@ spec:
       containers:
       - name: rabbitmq
         image: rabbitmq:3.9-management
-        imagePullPolicy: IfNotPresent
         ports:
         - name: amqp
           containerPort: 5672
         - name: management
           containerPort: 15672
-        - name: epmd
-          containerPort: 4369
-        - name: cluster-rpc
-          containerPort: 25672
         env:
+        - name: RABBITMQ_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: ailyze-secret
+              key: erlang-cookie
+        - name: RABBITMQ_USE_LONGNAME
+          value: "true"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: RABBITMQ_NODENAME
+          value: "rabbit@$(POD_NAME).ailyze-rabbitmq-headless.$(POD_NAMESPACE).svc.cluster.local"
+        - name: K8S_SERVICE_NAME
+          value: "ailyze-rabbitmq-headless"
         - name: RABBITMQ_DEFAULT_USER
           valueFrom:
             secretKeyRef:
@@ -40,33 +54,8 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: rabbitmq_password
-        - name: RABBITMQ_ERLANG_COOKIE
-          valueFrom:
-            secretKeyRef:
-              name: ailyze-secret
-              key: erlang-cookie
-        - name: RABBITMQ_LOG_LEVEL
-          value: "debug"
-        - name: K8S_SERVICE_NAME
-          value: "ailyze-rabbitmq-headless"
-        - name: RABBITMQ_USE_LONGNAME
-          value: "true"
-        - name: RABBITMQ_NODENAME
-          value: "rabbit@$(HOSTNAME).$(K8S_SERVICE_NAME).$(NAMESPACE).svc.cluster.local"
-        - name: HOSTNAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: RABBITMQ_CONFIG_FILE
-          value: "/etc/rabbitmq/rabbitmq.conf"
         volumeMounts:
-        - name: config
-          mountPath: /etc/rabbitmq
-        - name: rabbitmq-data
+        - name: data
           mountPath: /var/lib/rabbitmq
         readinessProbe:
           exec:
@@ -81,17 +70,10 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 60
           failureThreshold: 6
-          timeoutSeconds: 15  
-      volumes:
-      - name: config
-        configMap:
-          name: rabbitmq-config
-          items:
-          - key: rabbitmq.conf
-            path: rabbitmq.conf
+          timeoutSeconds: 15
   volumeClaimTemplates:
   - metadata:
-      name: rabbitmq-data
+      name: data
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
