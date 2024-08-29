@@ -1,11 +1,11 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: ailyze-rabbitmq-statefullset
+  name: ailyze-rabbitmq-deployment
   labels:
     app: ailyze-rabbitmq
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: ailyze-rabbitmq
@@ -14,15 +14,9 @@ spec:
       labels:
         app: ailyze-rabbitmq
     spec:
-      initContainers:
-      - name: init-rabbitmq
-        image: busybox
-        command: ["sh", "-c", "chmod 600 /var/lib/rabbitmq/.erlang.cookie"]
-        volumeMounts:
-        - name: rabbitmq-data
-          mountPath: /var/lib/rabbitmq
       containers:
       - name: rabbitmq
+        imagePullPolicy: IfNotPresent
         image: rabbitmq:3-management
         ports:
         - containerPort: 5672
@@ -38,43 +32,30 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: rabbitmq_password
-        - name: RABBITMQ_ERLANG_COOKIE
-          valueFrom:
-            secretKeyRef:
-              name: ailyze-secret
-              key: erlang_cookie
-        volumeMounts:
-        - name: rabbitmq-data
-          mountPath: /var/lib/rabbitmq
-      volumes:
-      - name: rabbitmq-data
-        persistentVolumeClaim:
-          claimName: ailyze-rabbitmq-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ailyze-rabbitmq-headless
-  labels:
-    app: ailyze-rabbitmq
-spec:
-  clusterIP: None
-  selector:
-    app: ailyze-rabbitmq
-  ports:
-  - name: amqp
-    port: 5672
-    targetPort: 5672
-  - name: management
-    port: 15672
-    targetPort: 15672
+        # livenessProbe:
+        #   httpGet:
+        #     path: /api/healthchecks/node
+        #     port: 15672
+        #   initialDelaySeconds: 120  
+        #   timeoutSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /api/healthchecks/node
+        #     port: 15672
+        #   initialDelaySeconds: 60 
+        #   timeoutSeconds: 10
+        # resources:
+        #   requests:
+        #     cpu: "100m"
+        #     memory: "150Mi"
+        #   limits:
+        #     cpu: "400m"
+        #     memory: "800Mi"    
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ailyze-rabbitmq-service
-  labels:
-    app: ailyze-rabbitmq
 spec:
   selector:
     app: ailyze-rabbitmq
@@ -85,22 +66,23 @@ spec:
   - name: management
     port: 15672
     targetPort: 15672
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: ailyze-rabbitmq-hpa
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: StatefulSet
-    name: ailyze-rabbitmq-statefullset
-  minReplicas: 3
-  maxReplicas: 5
-  metrics:
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+# ---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata: 
+#   name: ailyze-rabbitmq-hpa
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: ailyze-rabbitmq-deployment
+#   minReplicas: 1
+#   maxReplicas: 5
+#   metrics:
+#   - type: Resource
+#     resource:
+#       name: memory
+#       target:
+#         type: Utilization
+#         averageUtilization: 80
+
