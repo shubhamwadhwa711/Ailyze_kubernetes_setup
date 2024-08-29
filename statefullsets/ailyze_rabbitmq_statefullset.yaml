@@ -51,8 +51,8 @@ spec:
         - name: RABBITMQ_USE_LONGNAME
           value: "true"
         - name: RABBITMQ_NODENAME
-          value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(NAMESPACE).svc.cluster.local"
-        - name: MY_POD_NAME
+          value: "rabbit@$(HOSTNAME).$(K8S_SERVICE_NAME).$(NAMESPACE).svc.cluster.local"
+        - name: HOSTNAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
