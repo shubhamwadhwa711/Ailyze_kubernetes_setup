@@ -16,23 +16,27 @@ spec:
         app: ailyze-rabbitmq-cluster
     spec:
       terminationGracePeriodSeconds: 10
-      initContainers:
-      - name: enable-feature-flags
-        image: rabbitmq:3.11-management
-        command:
-        - /bin/bash
-        - -c
-        - |
-          until rabbitmqctl node_health_check; do sleep 5; done
-          rabbitmqctl enable_feature_flag classic_mirrored_queue_version
-          rabbitmqctl enable_feature_flag feature_flags_v2
-          rabbitmqctl enable_feature_flag direct_exchange_routing_v2
-          rabbitmqctl enable_feature_flag listener_records_in_ets
-          rabbitmqctl enable_feature_flag tracking_records_in_ets
       containers:
       - name: rabbitmq
         image: rabbitmq:3.11-management
         imagePullPolicy: IfNotPresent
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - |
+                until rabbitmqctl wait --timeout 60 --pid 1; do
+                  echo "Waiting for RabbitMQ to start..."
+                  sleep 5
+                done
+                rabbitmqctl enable_feature_flag classic_mirrored_queue_version || true
+                rabbitmqctl enable_feature_flag feature_flags_v2 || true
+                rabbitmqctl enable_feature_flag direct_exchange_routing_v2 || true
+                rabbitmqctl enable_feature_flag listener_records_in_ets || true
+                rabbitmqctl enable_feature_flag tracking_records_in_ets || true
+                echo "Feature flags enabled"
         ports:
         - name: amqp
           containerPort: 5672
@@ -71,6 +75,7 @@ spec:
           echo $RABBITMQ_ERLANG_COOKIE > /var/lib/rabbitmq/.erlang.cookie
           chmod 600 /var/lib/rabbitmq/.erlang.cookie
           exec docker-entrypoint.sh rabbitmq-server
+        
         volumeMounts:
         - name: data
           mountPath: /var/lib/rabbitmq
