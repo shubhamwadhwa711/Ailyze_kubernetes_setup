@@ -35,12 +35,6 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: erlang-cookie
-        - name: RABBITMQ_USE_LONGNAME
-          value: "true"
-        - name: K8S_SERVICE_NAME
-          value: "ailyze-rabbitmq-headless"
-        - name: RABBITMQ_NODENAME
-          value: "rabbit@$(K8S_HOSTNAME).$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc.cluster.local"
         - name: K8S_HOSTNAME
           valueFrom:
             fieldRef:
@@ -49,6 +43,12 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: RABBITMQ_USE_LONGNAME
+          value: "true"
+        - name: K8S_SERVICE_NAME
+          value: "ailyze-rabbitmq-headless"
+        - name: RABBITMQ_NODENAME
+          value: "rabbit@$(K8S_HOSTNAME).$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc.cluster.local"
         command:
         - sh
         - -c
