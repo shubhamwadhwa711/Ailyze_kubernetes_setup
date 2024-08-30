@@ -67,6 +67,9 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/rabbitmq
+        - name: rabbitmq-config
+          mountPath: /etc/rabbitmq/rabbitmq.conf
+          subPath: rabbitmq.conf
         readinessProbe:
           exec:
             command: ["rabbitmq-diagnostics", "check_running"]
@@ -81,6 +84,10 @@ spec:
           periodSeconds: 60
           failureThreshold: 6
           timeoutSeconds: 15
+      volumes:
+      - name: rabbitmq-config
+        configMap:
+          name: rabbitmq-config
   volumeClaimTemplates:
   - metadata:
       name: data
