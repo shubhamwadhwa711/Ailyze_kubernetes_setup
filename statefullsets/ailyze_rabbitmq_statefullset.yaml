@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ailyze-rabbitmq-cluster
 spec:
-  serviceName: "ailyze-rabbitmq-headless"
+  serviceName: ailyze-rabbitmq-headless
   replicas: 3
   selector:
     matchLabels:
@@ -46,9 +46,9 @@ spec:
         - name: RABBITMQ_USE_LONGNAME
           value: "true"
         - name: K8S_SERVICE_NAME
-          value: "ailyze-rabbitmq-headless"
+          value: ailyze-rabbitmq-headless
         - name: RABBITMQ_NODENAME
-          value: "rabbit@$(K8S_HOSTNAME).$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc.cluster.local"
+          value: rabbit@$(K8S_HOSTNAME).$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc.cluster.local
         command:
         - sh
         - -c
@@ -108,6 +108,10 @@ data:
     cluster_partition_handling = autoheal
     queue_master_locator = min-masters
     loopback_users.guest = false
+    cluster_formation.randomized_startup_delay_range.min = 0
+    cluster_formation.randomized_startup_delay_range.max = 60
+    cluster_formation.discovery_retry_limit = 10
+    cluster_formation.discovery_retry_interval = 500
   enabled_plugins: |
     [rabbitmq_management,rabbitmq_peer_discovery_k8s].
 ---
