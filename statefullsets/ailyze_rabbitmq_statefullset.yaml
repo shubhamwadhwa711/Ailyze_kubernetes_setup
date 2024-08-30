@@ -35,11 +35,11 @@ spec:
             secretKeyRef:
               name: ailyze-secret
               key: erlang-cookie
-        - name: K8S_HOSTNAME
+        - name: MY_POD_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: K8S_NAMESPACE
+        - name: MY_POD_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
@@ -48,7 +48,9 @@ spec:
         - name: K8S_SERVICE_NAME
           value: ailyze-rabbitmq-headless
         - name: RABBITMQ_NODENAME
-          value: rabbit@$(K8S_HOSTNAME).$(K8S_SERVICE_NAME).$(K8S_NAMESPACE).svc.cluster.local
+          value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
+        - name: K8S_HOSTNAME_SUFFIX
+          value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
         command:
         - sh
         - -c
@@ -112,6 +114,9 @@ data:
     cluster_formation.randomized_startup_delay_range.max = 60
     cluster_formation.discovery_retry_limit = 10
     cluster_formation.discovery_retry_interval = 500
+    log.console = true
+    log.console.level = debug
+    log.file.level = debug
   enabled_plugins: |
     [rabbitmq_management,rabbitmq_peer_discovery_k8s].
 ---
