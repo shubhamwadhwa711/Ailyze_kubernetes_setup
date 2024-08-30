@@ -111,6 +111,7 @@ data:
     cluster_partition_handling = autoheal
     queue_master_locator = min-masters
     loopback_users.guest = false
+    eature_flags.enabled = classic_mirrored_queue_version
 ---
 apiVersion: v1
 kind: Service
