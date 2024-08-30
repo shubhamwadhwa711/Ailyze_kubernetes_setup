@@ -20,11 +20,10 @@ spec:
       - name: enable-feature-flags
         image: rabbitmq:3.11-management
         command:
-        - sh
+        - /bin/bash
         - -c
         - |
-          sleep 5
-          rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit@$(hostname).pid
+          until rabbitmqctl node_health_check; do sleep 5; done
           rabbitmqctl enable_feature_flag classic_mirrored_queue_version
           rabbitmqctl enable_feature_flag feature_flags_v2
           rabbitmqctl enable_feature_flag direct_exchange_routing_v2
