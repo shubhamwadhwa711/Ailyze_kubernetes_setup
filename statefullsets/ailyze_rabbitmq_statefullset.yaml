@@ -16,6 +16,20 @@ spec:
         app: ailyze-rabbitmq-cluster
     spec:
       terminationGracePeriodSeconds: 10
+      initContainers:
+      - name: enable-feature-flags
+      image: rabbitmq:3.11-management
+      command:
+      - sh
+      - -c
+      - |
+        sleep 5
+        rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit@$(hostname).pid
+        rabbitmqctl enable_feature_flag classic_mirrored_queue_version
+        rabbitmqctl enable_feature_flag feature_flags_v2
+        rabbitmqctl enable_feature_flag direct_exchange_routing_v2
+        rabbitmqctl enable_feature_flag listener_records_in_ets
+        rabbitmqctl enable_feature_flag tracking_records_in_ets
       containers:
       - name: rabbitmq
         image: rabbitmq:3.11-management
