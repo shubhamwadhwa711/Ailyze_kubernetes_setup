@@ -18,8 +18,12 @@ spec:
       - name: celery-frequency
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
-        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "frequency_analysis", "-n", "frequency", "-Ofair"]
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "frequency_analysis", "-n", "$(POD_NAME)-frequency", "-Ofair"]
         env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: CELERY_BROKER_URL
           valueFrom:
             secretKeyRef:
