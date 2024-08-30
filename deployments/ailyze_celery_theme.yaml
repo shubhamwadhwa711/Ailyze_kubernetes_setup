@@ -18,7 +18,7 @@ spec:
       - name: celery-theme
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
-        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "themeandresearchquestion", "-n", "$(POD_NAME)-theme", "-Ofair"]  
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "themeandresearchquestion", "-n", "$(POD_NAME)-theme", "-Ofair","-E"]  
         env:
         - name: POD_NAME
           valueFrom:
