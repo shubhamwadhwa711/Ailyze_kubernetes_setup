@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: rabbitmq
-        image: rabbitmq:3.9-management
+        image: rabbitmq:3-management
         imagePullPolicy: IfNotPresent
         ports:
         - name: amqp
