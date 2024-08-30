@@ -114,6 +114,7 @@ data:
     cluster_formation.randomized_startup_delay_range.max = 60
     cluster_formation.discovery_retry_limit = 10
     cluster_formation.discovery_retry_interval = 500
+    feature_flags.tracking_records_in_ets = false
   enabled_plugins: |
     [rabbitmq_management,rabbitmq_peer_discovery_k8s].
 ---
