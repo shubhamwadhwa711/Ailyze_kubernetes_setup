@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/server-snippet: |
       if ($host = "ailyze.com") {
-        return 301 https://www.ailyze.com$request_uri;
+        rewrite ^ https://www.ailyze.com$request_uri? permanent;
       }
 spec:
   ingressClassName: nginx
@@ -19,16 +19,6 @@ spec:
     - www.ailyze.com
     secretName: ailyze-newreact-ssl
   rules:
-  - host: ailyze.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: ailyze-react-service
-            port:
-              number: 80
   - host: www.ailyze.com
     http:
       paths:
