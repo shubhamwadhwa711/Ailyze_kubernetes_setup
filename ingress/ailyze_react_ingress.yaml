@@ -7,6 +7,10 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      if ($host = "ailyze.com") {
+        return 301 https://www.ailyze.com$request_uri;
+      }
 spec:
   ingressClassName: nginx
   tls:
