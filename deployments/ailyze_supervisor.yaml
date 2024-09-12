@@ -24,6 +24,9 @@ spec:
         - name: supervisord-config
           mountPath: /etc/supervisord.conf
           subPath: supervisord.conf
+        - name: supervisord-script
+          mountPath: /etc/supervisord_start.sh
+          subPath: supervisord_start.sh
         env:
         - name: POD_NAME
           valueFrom:
