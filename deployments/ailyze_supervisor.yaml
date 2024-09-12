@@ -21,7 +21,7 @@ spec:
         args:
         - sed "s/\${{ POD_NAME }}/$POD_NAME/g" /etc/supervisord.conf > /config/supervisord.conf
         volumeMounts:
-        - name: config-volume
+        - name: supervisord-config  
           mountPath: /etc/supervisord.conf
           subPath: supervisord.conf
         - name: config-replacer-volume
@@ -50,8 +50,6 @@ spec:
       - name: supervisord-config
         configMap:
           name: ailyze-supervisord-conf
-      - name: config-replacer-volume
-        emptyDir: {} 
       imagePullSecrets:
       - name: acr-secret
 ---
