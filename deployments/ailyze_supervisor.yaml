@@ -32,7 +32,7 @@ spec:
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
-        args: ["supervisord -c /etc/supervisord.conf"]
+        args: ["supervisord -c /config/supervisord.conf"]
         volumeMounts:
         - name: config-replacer-volume
           mountPath: /config
