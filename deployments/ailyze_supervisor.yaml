@@ -26,9 +26,7 @@ spec:
           subPath: supervisord.conf
         env:
         - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+          value: {{ .metadata.name }}
         resources:
           requests:
             memory: "1500Mi"
@@ -44,14 +42,9 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ailyze-supervisord-script
+  name: ailyze-pod-name
 data:
-  supervisord_start.sh: |
-    #!/bin/sh
-    # Replace the placeholder in supervisord.conf with the actual POD_NAME
-    sed -i "s/\$(POD_NAME)/$POD_NAME/g" /etc/supervisord.conf
-    # Start supervisord
-    exec supervisord -c /etc/supervisord.conf
+  pod_name: "{{ .metadata.name }}"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -64,7 +57,7 @@ data:
     user=root
 
     [program:celerydefault]
-    command=celery -A AILYZE worker -l info -Q celery -n ${POD_NAME}-celeryworker
+    command=celery -A AILYZE worker -l info -Q celery -n ${{ POD_NAME }}-celeryworker
     directory=/AILYZE
     autostart=True
     autorestart=True
