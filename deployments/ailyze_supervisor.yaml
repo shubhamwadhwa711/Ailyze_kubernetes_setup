@@ -19,7 +19,7 @@ spec:
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
-        args: ["/etc/supervisord_start.sh"]
+        args: ["chmod +x /etc/supervisord_start.sh && /etc/supervisord_start.sh"]
         volumeMounts:
         - name: supervisord-config
           mountPath: /etc/supervisord.conf
