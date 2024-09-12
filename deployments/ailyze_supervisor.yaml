@@ -50,6 +50,8 @@ spec:
       - name: supervisord-config
         configMap:
           name: ailyze-supervisord-conf
+      - name: config-replacer-volume  
+        emptyDir: {}
       imagePullSecrets:
       - name: acr-secret
 ---
