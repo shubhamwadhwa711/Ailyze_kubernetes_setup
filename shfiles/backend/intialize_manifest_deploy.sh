@@ -13,6 +13,7 @@ kubectl apply \
     -f ./deployments/ailyze_celery_theme.yaml \
     -f ./deployments/ailyze_celery_frequency.yaml \
     -f ./deployments/ailyze_celery_compare.yaml \
+    -f ./deployments/ailyze_supervisor.yaml \
     -f ./ingress/ailyze_django_ingress.yaml \
     -f ./ingress/ailyze_flower_ingress.yaml \
     "$@";

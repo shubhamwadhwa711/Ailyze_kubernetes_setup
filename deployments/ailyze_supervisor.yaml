@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ailyze-celery-supervisor-deployment
+  labels: 
+    app: ailyze-celery-supervisor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ailyze-celery-supervisor
+  template:
+    metadata:
+      labels:
+        app: ailyze-celery-supervisor
+    spec:
+      containers:
+      - name: celery-supervisor
+        image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args: ["supervisord -c /etc/supervisord.conf"]
+        volumeMounts:
+        - name: supervisord-config
+          mountPath: /etc/supervisord.conf
+          subPath: supervisord.conf
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        resources:
+          requests:
+            memory: "1500Mi"
+          limits:
+            memory: "3Gi"
+      volumes:
+      - name: supervisord-config
+        configMap:
+          name: ailyze-supervisord-conf
+      imagePullSecrets:
+      - name: acr-secret
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ailyze-supervisord-conf
+data:
+  supervisord.conf: |
+    [supervisord]
+    nodaemon=true
+    user=root
+
+    [program:celerydefault]
+    command=celery -A AILYZE worker -l info -Q celery -n celeryworker@%HOSTNAME%
+    directory=/AILYZE
+    autostart=True
+    autorestart=True
+    stdout_logfile=/AILYZE/logs/celery_default.log
+    stderr_logfile=/AILYZE/logs/celery_default_err.log
+    startsecs=10
+
+    [program:celerybeat]
+    command=celery -A AILYZE beat -l info
+    directory=/AILYZE
+    autostart=True
+    autorestart=True
+    stdout_logfile=/AILYZE/logs/celery_beat.log
+    stderr_logfile=/AILYZE/logs/celery_beat_err.log
+    startsecs=10
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ailyze-celery-supervisor-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ailyze-celery-supervisor-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 60
