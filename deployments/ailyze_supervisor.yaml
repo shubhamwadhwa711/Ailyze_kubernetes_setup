@@ -14,28 +14,16 @@ spec:
       labels:
         app: ailyze-celery-supervisor
     spec:
-      initContainers:
-      - name: config-replacer
-        image: busybox
-        command: ["sh", "-c"]
-        args:
-        - sed "s/__POD_NAME__/$POD_NAME/g" /etc/supervisord.conf > /config/supervisord.conf
-        volumeMounts:
-        - name: supervisord-config  
-          mountPath: /etc/supervisord.conf
-          subPath: supervisord.conf
-        - name: config-replacer-volume
-          mountPath: /config
-
       containers:
       - name: celery-supervisor
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
-        args: ["supervisord -c /config/supervisord.conf"]
+        args: ["supervisord -c /etc/supervisord.conf"]
         volumeMounts:
-        - name: config-replacer-volume
-          mountPath: /config
+        - name: supervisord-config  
+          mountPath: /etc/supervisord.conf
+          subPath: supervisord.conf
         env:
         - name: POD_NAME
           valueFrom:
@@ -50,8 +38,6 @@ spec:
       - name: supervisord-config
         configMap:
           name: ailyze-supervisord-conf
-      - name: config-replacer-volume  
-        emptyDir: {}
       imagePullSecrets:
       - name: acr-secret
 ---
@@ -66,8 +52,7 @@ data:
     user=root
 
     [program:celerydefault]
-    command=celery -A AILYZE worker -l info -Q celery -n __POD_NAME__-celeryworker
-    directory=/AILYZE
+    command=celery -A AILYZE worker -l info -Q celery 
     autostart=True
     autorestart=True
     stdout_logfile=/AILYZE/logs/celery_default.log
@@ -82,22 +67,22 @@ data:
     stdout_logfile=/AILYZE/logs/celery_beat.log
     stderr_logfile=/AILYZE/logs/celery_beat_err.log
     startsecs=10
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: ailyze-celery-supervisor-hpa
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: ailyze-celery-supervisor-deployment
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 60
+# ---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: ailyze-celery-supervisor-hpa
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: ailyze-celery-supervisor-deployment
+#   minReplicas: 1
+#   maxReplicas: 5
+#   metrics:
+#   - type: Resource
+#     resource:
+#       name: memory
+#       target:
+#         type: Utilization
+#         averageUtilization: 60
