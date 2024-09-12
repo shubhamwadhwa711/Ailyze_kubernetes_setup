@@ -19,7 +19,7 @@ spec:
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
-        args: ["supervisord -c /etc/supervisord.conf"]
+        args: ["/etc/supervisord_start.sh"]
         volumeMounts:
         - name: supervisord-config
           mountPath: /etc/supervisord.conf
@@ -38,8 +38,20 @@ spec:
       - name: supervisord-config
         configMap:
           name: ailyze-supervisord-conf
+      - name: supervisord-script
+        configMap:
+          name: ailyze-supervisord-script
       imagePullSecrets:
       - name: acr-secret
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ailyze-supervisord-script
+data:
+  supervisord_start.sh: |
+    sed -i "s/\$(POD_NAME)/$POD_NAME/g" /etc/supervisord.conf
+    exec supervisord -c /etc/supervisord.conf
 ---
 apiVersion: v1
 kind: ConfigMap
