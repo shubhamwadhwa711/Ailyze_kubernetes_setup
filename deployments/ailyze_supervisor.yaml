@@ -19,14 +19,11 @@ spec:
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["/bin/sh", "-c"]
-        args: ["chmod +x /etc/supervisord_start.sh && /etc/supervisord_start.sh"]
+        args: ["supervisord -c /etc/supervisord.conf"]
         volumeMounts:
         - name: supervisord-config
           mountPath: /etc/supervisord.conf
           subPath: supervisord.conf
-        - name: supervisord-script
-          mountPath: /etc/supervisord_start.sh
-          subPath: supervisord_start.sh
         env:
         - name: POD_NAME
           valueFrom:
@@ -41,9 +38,6 @@ spec:
       - name: supervisord-config
         configMap:
           name: ailyze-supervisord-conf
-      - name: supervisord-script
-        configMap:
-          name: ailyze-supervisord-script
       imagePullSecrets:
       - name: acr-secret
 ---
@@ -53,7 +47,10 @@ metadata:
   name: ailyze-supervisord-script
 data:
   supervisord_start.sh: |
+    #!/bin/sh
+    # Replace the placeholder in supervisord.conf with the actual POD_NAME
     sed -i "s/\$(POD_NAME)/$POD_NAME/g" /etc/supervisord.conf
+    # Start supervisord
     exec supervisord -c /etc/supervisord.conf
 ---
 apiVersion: v1
@@ -67,7 +64,7 @@ data:
     user=root
 
     [program:celerydefault]
-    command=celery -A AILYZE worker -l info -Q celery -n $(POD_NAME)-celeryworker
+    command=celery -A AILYZE worker -l info -Q celery -n ${POD_NAME}-celeryworker
     directory=/AILYZE
     autostart=True
     autorestart=True
