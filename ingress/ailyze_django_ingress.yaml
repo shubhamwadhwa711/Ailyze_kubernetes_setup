@@ -9,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300" 
     nginx.ingress.kubernetes.io/proxy-body-size: "200M"
+    nginx.ingress.kubernetes.io/server-snippet: "keepalive_timeout 300s; client_body_buffer_size 10K;client_max_body_size 200M;"
 spec:
   ingressClassName: nginx
   tls:

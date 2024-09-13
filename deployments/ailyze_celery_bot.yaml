@@ -18,7 +18,7 @@ spec:
       - name: celery-bot
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
-        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "prepare_bot", "-n", "$(POD_NAME)-bot", "-Ofair","-E"]
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "prepare_bot", "-n", "$(POD_NAME)-bot", "-Ofair"]
         env:
         - name: POD_NAME
           valueFrom:

@@ -18,7 +18,7 @@ spec:
       - name: celery-compare
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
-        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "compareviewpoint", "-n", "$(POD_NAME)-compare", "-Ofair","-E"]
+        command: ["celery", "-A", "AILYZE", "worker", "-l", "info", "-Q", "compareviewpoint", "-n", "$(POD_NAME)-compare", "-Ofair"]
         env:
         - name: POD_NAME
           valueFrom:
