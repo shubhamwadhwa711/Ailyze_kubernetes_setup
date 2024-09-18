@@ -13,5 +13,7 @@ spec:
         image: ailyzeregistery.azurecr.io/ailyze-django:latest
         imagePullPolicy: Always
         command: ["python", "manage.py", "migrate"]
+      imagePullSecrets:
+      - name: acr-secret
       restartPolicy: OnFailure
   backoffLimit: 4
