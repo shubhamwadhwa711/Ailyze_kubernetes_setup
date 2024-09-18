@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ailyze-migrate-job
+spec:
+  template:
+    metadata:
+      labels:
+        app: ailyze-migrate-job
+    spec:
+      containers:
+      - name: migrate
+        image: ailyzeregistery.azurecr.io/ailyze-django:latest
+        imagePullPolicy: Always
+        command: ["python", "manage.py", "migrate"]
+      restartPolicy: OnFailure
+  backoffLimit: 4

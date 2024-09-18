@@ -59,8 +59,13 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 2 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log --timeout 3600
+            gunicorn --bind 0.0.0.0:8001 AILYZE.asgi:application \
+            --workers 3 \
+            --worker-class uvicorn.workers.UvicornWorker \
+            --log-level info \
+            --access-logfile - \
+            --error-logfile - \
+            --timeout 3600
         resources:
           requests:
             cpu: "100m"
