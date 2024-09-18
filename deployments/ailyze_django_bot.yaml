@@ -60,7 +60,7 @@ spec:
         args:
           - |
             python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 2 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log  
+            gunicorn --bind 0.0.0.0:8001 AILYZE.wsgi:application -w 2 --log-level info --access-logfile ./bot.access.log --error-logfile ./bot.error.log --timeout 3600
         resources:
           requests:
             cpu: "100m"

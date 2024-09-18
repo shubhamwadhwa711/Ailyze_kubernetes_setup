@@ -5,18 +5,11 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-body-size: "200M"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      keepalive_timeout 300s;  
-      client_max_body_size 200M;  
-      client_body_buffer_size 128k;  
-      client_header_buffer_size 1k; 
-      ssl_buffer_size 4k; 
-      proxy_set_header X-Real-IP $remote_addr; 
-      proxy_set_header Host $host; 
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "256k"
 spec:
   ingressClassName: nginx
   tls:

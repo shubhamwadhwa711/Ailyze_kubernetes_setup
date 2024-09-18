@@ -60,7 +60,7 @@ spec:
         args:
           - |
             python manage.py migrate &&
-            gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 2 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log
+            gunicorn --bind 0.0.0.0:8000 AILYZE.asgi:application -w 3 -k uvicorn.workers.UvicornWorker --log-level info --access-logfile ./access.log --error-logfile ./error.log --timeout 3600
         resources:
           requests:
             cpu: "100m"
