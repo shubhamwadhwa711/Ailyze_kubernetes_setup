@@ -41,7 +41,7 @@ spec:
           mountPath: /usr/src/app 
         resources:
           requests:
-            memory: "1500Mi"
+            memory: "1800Mi"
           limits:
             memory: "4Gi"
       volumes:
@@ -74,11 +74,11 @@ spec:
     kind: Deployment
     name: ailyze-celery-theme-deployment
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 8
   metrics:
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 80
